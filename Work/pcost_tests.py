@@ -4,7 +4,7 @@ import pcost as pc
 class KnownOutput(unittest.TestCase):
 
     def test_main_output(self):
-        self.assertEqual(pc.main(), 'Total cost 44671.15')
+        self.assertEqual(pc.main('Data/portfolio.csv'), 'Total cost 44671.15')
 
     def test_portfolio_cost(self):
         self.assertEqual(pc.portfolio_cost('./Data/portfolio.csv'), 44671.15)

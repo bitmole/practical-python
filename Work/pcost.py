@@ -2,22 +2,29 @@
 #
 # Exercise 1.27
 
+import csv
+import sys
+
 def portfolio_cost(path):
     total = 0
     f = open(path, 'rt')
+    rows = csv.reader(f)
     _ = next(f) # skip headers
-    for line in f:
-        stock, shares, price = line.split(',')
+    for row in rows:
+        stock, shares, price = row
         try:
-            shares, price = int(shares), float(price)
-            total += shares * price
+            total += int(shares) * float(price)
         except ValueError:
-            print("Couldn't parse", line.strip())
+            print("Couldn't parse", row)
 
     f.close()
     return total
 
-def main():
-    total = portfolio_cost('./Data/portfolio.csv')
+def main(path):
+    total = portfolio_cost(path)
     return f'Total cost {total:0.2f}'
+
+if __name__ == "__main__":
+    path = sys.argv[1] if len(sys.argv)==2 else 'Data/portfolio.csv'
+    print(main(path))
 
