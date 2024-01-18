@@ -2,7 +2,7 @@
 #
 # Exercise 1.27
 
-def main():
+def portfolio_cost():
     total = 0
     f = open('./Data/portfolio.csv', 'rt')
     _ = next(f) # skip headers
@@ -11,4 +11,9 @@ def main():
         shares, price = int(shares), float(price)
         total += shares * price
     f.close()
+    return total
+
+def main():
+    total = portfolio_cost()
     return f'Total cost {total:0.2f}'
+
