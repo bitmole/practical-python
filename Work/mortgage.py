@@ -12,12 +12,12 @@ def calc(start, end, extra_payment):
     while principal > 0:
         npayments = npayments + 1
         cur_payment = payment + extra_payment if start <= npayments <= end else payment
-        principal = principal * (1+rate/12) - cur_payment 
+        remaining = principal * (1+rate/12)
+        if cur_payment > remaining: # overpayment?
+            cur_payment = remaining
+        principal = remaining - cur_payment 
         total_paid = total_paid + cur_payment
         print(npayments, round(cur_payment, 2), round(total_paid, 2), round(principal, 2))
-
-    if principal < 0: # overpaid?
-        total_paid -= -principal
 
     print('Total paid', round(total_paid, 2), "in", npayments, "months")
 
