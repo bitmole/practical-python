@@ -17,9 +17,9 @@ def calc(start, end, extra_payment):
             cur_payment = remaining
         principal = remaining - cur_payment 
         total_paid = total_paid + cur_payment
-        print(npayments, round(cur_payment, 2), round(total_paid, 2), round(principal, 2))
+        print(f'{npayments} {cur_payment:>8.2f} {total_paid:>10.2f} {principal:>10.2f}')
 
-    print('Total paid', round(total_paid, 2), "in", npayments, "months")
+    print(f'{34*"-"}\nTotal paid: {total_paid:0.2f} in {npayments} months')
 
 if __name__ == "__main__":
     start = input('start month: ')
