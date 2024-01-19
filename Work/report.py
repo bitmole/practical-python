@@ -29,17 +29,22 @@ def read_prices(path):
     prices = {}
     with open(path, 'rt') as f:
         rows = csv.reader(f)
-        rows = [r for r in rows if r] # sanitize
-        prices = {s:float(p) for s,p in rows}
+        prices = {s:float(p) for s,p in [r for r in rows if r]}
     return prices
 
-def main(path):
-    portfolio = read_portfolio(path)
+def main(path_portfolio, path_prices):
+    portfolio = read_portfolio(path_portfolio)
+    prices = read_prices(path_prices)
     pprint(portfolio)
-    total = sum(s['shares']*s['price'] for s in portfolio)
-    return f'Total cost {total:0.2f}'
+    pprint(prices)
+    total_cost = sum(s['shares']*s['price'] for s in portfolio)
+    cur_value = sum(s['shares']*prices[s['name']] for s in portfolio)
+    print(f'Total cost: {total_cost:0.2f}')
+    print(f'Current value: {cur_value:0.2f}')
+    print(f'Total gain: {cur_value-total_cost:0.2f}')
 
 if __name__ == "__main__":
     _, *rest = sys.argv
-    path = rest[0] if rest else 'Data/portfolio.csv'
-    print(main(path))
+    path_portfolio = rest[0] if len(rest)>0 else 'Data/portfolio.csv'
+    path_prices = rest[1] if len(rest)>1 else 'Data/prices.csv'
+    main(path_portfolio, path_prices)

@@ -3,9 +3,6 @@ import report as rep
 
 class KnownOutput(unittest.TestCase):
 
-    def test_main_output(self):
-        self.assertEqual(rep.main('Data/portfolio.csv'), 'Total cost 44671.15')
-
     def test_read_portfolio(self):
         expected = [
             {'name': 'AA', 'shares': 100, 'price': 32.2}, 
