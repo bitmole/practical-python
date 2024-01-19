@@ -5,7 +5,7 @@
 import csv
 import sys
 
-def portfolio_cost(path):
+def read_portfolio(path):
     '''Computes the total cost of a portfolio file'''
     portfolio = []
 
@@ -19,11 +19,12 @@ def portfolio_cost(path):
             except ValueError:
                 print("Couldn't parse", row)
 
-    return portfolio
+    return [{'name': stock, 'shares': shares, 'price': price} 
+            for (stock,shares,price) in portfolio]
 
 def main(path):
-    portfolio = portfolio_cost(path)
-    total = sum(n*p for (s,n,p) in portfolio)
+    portfolio = read_portfolio(path)
+    total = sum(s['shares']*s['price'] for s in portfolio)
     return f'Total cost {total:0.2f}'
 
 if __name__ == "__main__":

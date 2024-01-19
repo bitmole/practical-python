@@ -6,27 +6,27 @@ class KnownOutput(unittest.TestCase):
     def test_main_output(self):
         self.assertEqual(rep.main('Data/portfolio.csv'), 'Total cost 44671.15')
 
-    def test_portfolio_cost(self):
+    def test_read_portfolio(self):
         expected = [
-                ('AA', 100, 32.2), 
-                ('IBM', 50, 91.1), 
-                ('CAT', 150, 83.44), 
-                ('MSFT', 200, 51.23), 
-                ('GE', 95, 40.37), 
-                ('MSFT', 50, 65.1), 
-                ('IBM', 100, 70.44)
-                ]
-        self.assertEqual(rep.portfolio_cost('./Data/portfolio.csv'), expected)
+            {'name': 'AA', 'shares': 100, 'price': 32.2}, 
+            {'name': 'IBM', 'shares': 50, 'price': 91.1},
+            {'name': 'CAT', 'shares': 150, 'price': 83.44},
+            {'name': 'MSFT', 'shares': 200, 'price': 51.23},
+            {'name': 'GE', 'shares': 95, 'price': 40.37}, 
+            {'name': 'MSFT', 'shares': 50, 'price': 65.1},
+            {'name': 'IBM', 'shares': 100, 'price': 70.44}
+        ]
+        self.assertEqual(rep.read_portfolio('./Data/portfolio.csv'), expected)
 
     def test_missing_fields(self):
         expected = [
-                ('AA', 100, 32.2), 
-                ('IBM', 50, 91.1), 
-                ('CAT', 150, 83.44), 
-                ('GE', 95, 40.37), 
-                ('MSFT', 50, 65.1), 
-                ]
-        self.assertEqual(rep.portfolio_cost('Data/missing.csv'), expected)
+            {'name': 'AA', 'shares': 100, 'price': 32.2}, 
+            {'name': 'IBM', 'shares': 50, 'price': 91.1},
+            {'name': 'CAT', 'shares': 150, 'price': 83.44},
+            {'name': 'GE', 'shares': 95, 'price': 40.37}, 
+            {'name': 'MSFT', 'shares': 50, 'price': 65.1},
+        ]
+        self.assertEqual(rep.read_portfolio('Data/missing.csv'), expected)
 
 if __name__ == "__main__":
     unittest.main()
