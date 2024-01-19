@@ -9,7 +9,7 @@ def portfolio_cost(path):
     total = 0
     f = open(path, 'rt')
     rows = csv.reader(f)
-    _ = next(f) # skip headers
+    _ = next(rows) # skip headers
     for row in rows:
         stock, shares, price = row
         try:
