@@ -25,6 +25,7 @@ def main(path):
     return f'Total cost {total:0.2f}'
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv)==2 else 'Data/portfolio.csv'
+    _, *rest = sys.argv
+    path = rest[0] if rest else 'Data/portfolio.csv'
     print(main(path))
 
