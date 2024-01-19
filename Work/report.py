@@ -15,12 +15,14 @@ def read_portfolio(path):
         for row in rows:
             try:
                 stock, shares, price = row
-                portfolio.append((stock, int(shares), float(price)))
+                portfolio.append({
+                         'name': stock,
+                         'shares': int(shares),
+                         'price': float(price)})
             except ValueError:
                 print("Couldn't parse", row)
 
-    return [{'name': stock, 'shares': shares, 'price': price} 
-            for (stock,shares,price) in portfolio]
+    return portfolio
 
 def main(path):
     portfolio = read_portfolio(path)
