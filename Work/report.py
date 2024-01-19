@@ -25,6 +25,14 @@ def read_portfolio(path):
 
     return portfolio
 
+def read_prices(path):
+    prices = {}
+    with open(path, 'rt') as f:
+        rows = csv.reader(f)
+        rows = [r for r in rows if r] # sanitize
+        prices = {s:float(p) for s,p in rows}
+    return prices
+
 def main(path):
     portfolio = read_portfolio(path)
     pprint(portfolio)
