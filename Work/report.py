@@ -32,6 +32,16 @@ def read_prices(path):
         prices = {s:float(p) for s,p in [r for r in rows if r]}
     return prices
 
+def make_report(portfolio, prices):
+    rows = []
+    for s in portfolio:
+        name = s['name']
+        nshares = s['shares']
+        cur_price = prices[s['name']]
+        change = cur_price - s['price']
+        rows.append((name, nshares, cur_price, change))
+    return rows
+
 def main(path_portfolio, path_prices):
     portfolio = read_portfolio(path_portfolio)
     prices = read_prices(path_prices)
