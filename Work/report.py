@@ -45,13 +45,18 @@ def make_report(portfolio, prices):
 def main(path_portfolio, path_prices):
     portfolio = read_portfolio(path_portfolio)
     prices = read_prices(path_prices)
-    pprint(portfolio)
-    pprint(prices)
-    total_cost = sum(s['shares']*s['price'] for s in portfolio)
+    headers = ('Name', 'Shares', 'Price', 'Change')
+    print('%10s %10s %10s %10s' % headers)
+    print(len(headers) * ((10*'-') + ' '))
+    row_format = '%10s %10d %10.2f %10.2f'
+    for r in make_report(portfolio, prices):
+        print(row_format % r)
+    print(43 * '=')
+    purchase_price = sum(s['shares']*s['price'] for s in portfolio)
     cur_value = sum(s['shares']*prices[s['name']] for s in portfolio)
-    print(f'Total cost: {total_cost:0.2f}')
-    print(f'Current value: {cur_value:0.2f}')
-    print(f'Total gain: {cur_value-total_cost:0.2f}')
+    print(f'Purchase price: {purchase_price:>10.2f}')
+    print(f' Current value: {cur_value:>10.2f}')
+    print(f'    Total gain: {cur_value-purchase_price:>10.2f}')
 
 if __name__ == "__main__":
     _, *rest = sys.argv
