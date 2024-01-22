@@ -56,8 +56,8 @@ def main(path_portfolio, path_prices):
 
     # print rows
     for s, n, p, d in make_report(portfolio, prices):
-        print('{:>10s} {:>10d} {:>10s} {:>10.2f}'
-              .format(s, n, '${:0.2f}'.format(p), d))
+        p = f'${p:0.2f}'
+        print(f'{s:>10s} {n:>10d} {p:>10s} {d:>10.2f}')
 
     # print summary
     print('='*43)
