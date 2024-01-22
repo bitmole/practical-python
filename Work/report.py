@@ -12,14 +12,13 @@ def read_portfolio(path):
 
     with open(path, 'rt') as f:
         rows = csv.reader(f)
-        _ = next(rows) # skip headers
+        headers = next(rows)
         for row in rows:
+            rec = dict(zip(headers, row))
             try:
-                stock, shares, price = row
-                portfolio.append({
-                         'name': stock,
-                         'shares': int(shares),
-                         'price': float(price)})
+                rec['shares'] = int(rec['shares'])
+                rec['price'] = float(rec['price'])
+                portfolio.append(rec)
             except ValueError:
                 print("Couldn't parse", row)
 

@@ -6,19 +6,19 @@ import csv
 import sys
 
 def portfolio_cost(path):
-    total = 0
+    total_cost = 0
     f = open(path, 'rt')
     rows = csv.reader(f)
-    _ = next(rows) # skip headers
-    for row in rows:
-        stock, shares, price = row
+    headers = next(rows)
+    for i, row in enumerate(rows, start=1):
+        rec = dict(zip(headers, row))
         try:
-            total += int(shares) * float(price)
+            total_cost += int(rec['shares']) * float(rec['price'])
         except ValueError:
-            print("Couldn't parse", row)
+            print(f"Row {i}: Couldn't convert: {row}")
 
     f.close()
-    return total
+    return total_cost
 
 def main(path):
     total = portfolio_cost(path)
