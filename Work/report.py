@@ -43,17 +43,24 @@ def make_report(portfolio, prices):
     return rows
 
 def main(path_portfolio, path_prices):
+    # collect report data
     portfolio = read_portfolio(path_portfolio)
     prices = read_prices(path_prices)
-    headers = ('Name', 'Shares', 'Price', 'Change')
-    print('%10s %10s %10s %10s' % headers)
-    print(len(headers) * ((10*'-') + ' '))
-    row_format = '%10s %10d %10.2f %10.2f'
-    for r in make_report(portfolio, prices):
-        print(row_format % r)
-    print(43 * '=')
     purchase_price = sum(s['shares']*s['price'] for s in portfolio)
     cur_value = sum(s['shares']*prices[s['name']] for s in portfolio)
+
+    # print headers
+    headers = ('Name', 'Shares', 'Price', 'Change')
+    print('%10s '*len(headers) % headers)
+    print(len(headers) * ((10*'-') + ' '))
+
+    # print rows
+    for s, n, p, d in make_report(portfolio, prices):
+        print('{:>10s} {:>10d} {:>10s} {:>10.2f}'
+              .format(s, n, '${:0.2f}'.format(p), d))
+
+    # print summary
+    print('='*43)
     print(f'Purchase price: {purchase_price:>10.2f}')
     print(f' Current value: {cur_value:>10.2f}')
     print(f'    Total gain: {cur_value-purchase_price:>10.2f}')
