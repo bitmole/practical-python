@@ -40,7 +40,7 @@ def make_report(portfolio, prices):
         rows.append((name, nshares, cur_price, change))
     return rows
 
-def main(path_portfolio, path_prices):
+def print_report(path_portfolio, path_prices):
     # collect report data
     portfolio = read_portfolio(path_portfolio)
     prices = read_prices(path_prices)
@@ -67,4 +67,4 @@ if __name__ == "__main__":
     _, *rest = sys.argv
     path_portfolio = rest[0] if len(rest)>0 else 'Data/portfolio.csv'
     path_prices = rest[1] if len(rest)>1 else 'Data/prices.csv'
-    main(path_portfolio, path_prices)
+    print_report(path_portfolio, path_prices)
