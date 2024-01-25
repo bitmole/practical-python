@@ -18,13 +18,9 @@ def parse_csv(filename, select=None):
         if select:
             indices = [headers.index(c) for c in select]
             headers = select
-        else:
-            indices = []
+            # filter & sanitize
+            rows = [[row[i] for i in indices] for row in rows if row]
 
-        records = []
-        for row in rows:
-            if indices:
-                row = [row[i] for i in indices]
-            records.append(dict(zip(headers, row)))
+        records = [dict(zip(headers, row)) for row in rows] 
 
     return records
