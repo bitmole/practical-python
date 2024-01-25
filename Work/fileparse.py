@@ -3,13 +3,15 @@
 # Exercise 3.3
 import csv
 
-def parse_csv(filename, select=None, types=None, has_headers=True):
+def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','):
     """Parse a CSV file into a list of records
        structured as dicts.
 
-    :filename: path to file
-    :select: columns
-    :types: conversion functions
+    :filename:      path to file
+    :select:        columns
+    :types:         conversion functions
+    :has_headers
+    :delimiter
     :returns: list of records (dicts)
 
     """
@@ -21,7 +23,7 @@ def parse_csv(filename, select=None, types=None, has_headers=True):
 
     records = []
     with open(filename) as f:
-        rows = csv.reader(f)
+        rows = csv.reader(f, delimiter=delimiter)
         if has_headers:
             headers = next(rows)
 
