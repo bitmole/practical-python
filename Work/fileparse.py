@@ -8,6 +8,8 @@ def parse_csv(filename, select=None, types=None):
        structured as dicts.
 
     :filename: path to file
+    :select: columns
+    :types: conversion functions
     :returns: list of records (dicts)
 
     """
