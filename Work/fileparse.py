@@ -29,35 +29,31 @@ def parse_csv(filename,
 
     # type conversion helper
     def convert(row, i):
-        converted = []
-        for val, t in zip(row, types):
-            try:
-                converted.append(t(val))
-            except ValueError as e:
-                if not silence_errors:
-                    print(f"Row {i}: Couldn't convert", row)
-                    print(f"Row {i}: Reason", e)
-        return converted
+        assert types
+        try:
+            return [t(val) for t, val in zip(types, row)]
+        except ValueError as e:
+            if not silence_errors:
+                print(f"Row {i}: Couldn't convert", row)
+                print(f"Row {i}: Reason", e)
 
     records = []
-    with open(filename) as f:
+    with open(filename, 'rt') as f:
         rows = csv.reader(f, delimiter=delimiter)
         if has_headers:
             headers = next(rows)
-
-        rows = (r for r in rows if r) # ignore empty rows
 
         # filter columns
         if select:
             indices = [headers.index(c) for c in select]
             headers = select
             rows = [[row[i] for i in indices] for row in rows]
-        elif types:
-            assert len(headers)==len(types)
 
         # convert to types
         if types:
-            rows = [[convert(row, i)] for i, row in enumerate(rows, start=1)]
+            rows = [convert(row, i) for i, row in enumerate(rows, start=1)]
+
+        rows = (r for r in rows if r) # ignore empty rows
 
         # package to records
         if has_headers:

@@ -5,30 +5,20 @@
 import csv
 import sys
 from pprint import pprint
+import fileparse
 
 def read_portfolio(path):
-    '''Computes the total cost of a portfolio file'''
-    portfolio = []
-
-    with open(path, 'rt') as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-        types = [str, int, float]
-        for row in rows:
-            try:
-                rec = {h:f(val) for h,f,val in zip(headers,types,row)}
-                portfolio.append(rec)
-            except ValueError:
-                print("Couldn't parse", row)
-
-    return portfolio
+    """
+    Parses data file into stock portfolio
+    """
+    return fileparse.parse_csv(path, types=[str, int, float])
 
 def read_prices(path):
-    prices = {}
-    with open(path, 'rt') as f:
-        rows = csv.reader(f)
-        prices = {s:float(p) for s,p in [r for r in rows if r]}
-    return prices
+    """
+    Parses price data file into stock price dictionary
+    """
+    prices = fileparse.parse_csv(path, types=[str, float], has_headers=False)
+    return {n:p for n, p in prices}
 
 def make_report(portfolio, prices):
     rows = []
@@ -54,7 +44,7 @@ def print_report(path_portfolio, path_prices):
 
     # print rows
     for s, n, p, d in make_report(portfolio, prices):
-        p = f'${p:0.2f}'
+        p = f'${p:0.2f}' # pre-format price
         print(f'{s:>10s} {n:>10d} {p:>10s} {d:>10.2f}')
 
     # print summary
