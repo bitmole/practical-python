@@ -27,6 +27,18 @@ def parse_csv(filename,
     if select and types and len(select) != len(types):
         raise RuntimeError('select and types lists must have the same shape')
 
+    # type conversion helper
+    def convert(row, i):
+        converted = []
+        for val, t in zip(row, types):
+            try:
+                converted.append(t(val))
+            except ValueError as e:
+                if not silence_errors:
+                    print(f"Row {i}: Couldn't convert", row)
+                    print(f"Row {i}: Reason", e)
+        return converted
+
     records = []
     with open(filename) as f:
         rows = csv.reader(f, delimiter=delimiter)
@@ -43,18 +55,7 @@ def parse_csv(filename,
         elif types:
             assert len(headers)==len(types)
 
-        # convert
-        def convert(row, i):
-            converted = []
-            for val, t in zip(row, types):
-                try:
-                    converted.append(t(val))
-                except ValueError as e:
-                    if not silence_errors:
-                        print(f"Row {i}: Couldn't convert", row)
-                        print(f"Row {i}: Reason", e)
-            return converted
-                
+        # convert to types
         if types:
             rows = [[convert(row, i)] for i, row in enumerate(rows, start=1)]
 
