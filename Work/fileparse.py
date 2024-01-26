@@ -3,7 +3,12 @@
 # Exercise 3.3
 import csv
 
-def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','):
+def parse_csv(filename, 
+              select=None, 
+              types=None, 
+              has_headers=True, 
+              delimiter=',', 
+              silence_errors=False):
     """Parse a CSV file into a list of records
        structured as dicts.
 
@@ -12,14 +17,15 @@ def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','
     :types:         conversion functions
     :has_headers
     :delimiter
+    :silence_errors
     :returns: list of records (dicts)
 
     """
-    if select and types:
-        assert len(select)==len(types)
+    if select and not has_headers:
+        raise RuntimeError('select argument requires column headers')
 
-    if select:
-        assert has_headers
+    if select and types and len(select) != len(types):
+        raise RuntimeError('select and types lists must have the same shape')
 
     records = []
     with open(filename) as f:
@@ -38,8 +44,19 @@ def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','
             assert len(headers)==len(types)
 
         # convert
+        def convert(row, i):
+            converted = []
+            for val, t in zip(row, types):
+                try:
+                    converted.append(t(val))
+                except ValueError as e:
+                    if not silence_errors:
+                        print(f"Row {i}: Couldn't convert", row)
+                        print(f"Row {i}: Reason", e)
+            return converted
+                
         if types:
-            rows = [[t(val) for t, val in zip(types, row)] for row in rows]
+            rows = [[convert(row, i)] for i, row in enumerate(rows, start=1)]
 
         # package to records
         if has_headers:
