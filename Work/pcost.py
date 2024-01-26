@@ -4,21 +4,11 @@
 
 import csv
 import sys
+import report
 
 def portfolio_cost(path):
-    total_cost = 0
-    f = open(path, 'rt')
-    rows = csv.reader(f)
-    headers = next(rows)
-    for i, row in enumerate(rows, start=1):
-        rec = dict(zip(headers, row))
-        try:
-            total_cost += int(rec['shares']) * float(rec['price'])
-        except ValueError:
-            print(f"Row {i}: Couldn't convert: {row}")
-
-    f.close()
-    return total_cost
+    portfolio = report.read_portfolio(path)
+    return sum(s['shares'] * s['price'] for s in portfolio)
 
 def main(path):
     total = portfolio_cost(path)
