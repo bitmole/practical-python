@@ -28,14 +28,15 @@ def parse_csv(filename,
         raise RuntimeError('select and types lists must have the same shape')
 
     # type conversion helper
-    def convert(row, i):
+    def convert(rows):
         assert types
-        try:
-            return [t(val) for t, val in zip(types, row)]
-        except ValueError as e:
-            if not silence_errors:
-                print(f"Row {i}: Couldn't convert", row)
-                print(f"Row {i}: Reason", e)
+        for i, row in enumerate(rows):
+            try:
+                yield [t(val) for t, val in zip(types, row)] 
+            except ValueError as e:
+                if not silence_errors:
+                    print(f"Row {i}: Couldn't convert", row)
+                    print(f"Row {i}: Reason", e)
 
     records = []
     with open(filename, 'rt') as f:
@@ -43,17 +44,17 @@ def parse_csv(filename,
         if has_headers:
             headers = next(rows)
 
+        rows = (r for r in rows if r) # generate only non-empty rows
+
         # filter columns
         if select:
             indices = [headers.index(c) for c in select]
             headers = select
-            rows = [[row[i] for i in indices] for row in rows]
+            rows = ([row[i] for i in indices] for row in rows)
 
         # convert to types
         if types:
-            rows = [convert(row, i) for i, row in enumerate(rows, start=1)]
-
-        rows = (r for r in rows if r) # ignore empty rows
+            rows = convert(rows)
 
         # package to records
         if has_headers:

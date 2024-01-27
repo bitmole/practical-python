@@ -3,8 +3,6 @@
 # Exercise 2.4
 
 import csv
-import sys
-from pprint import pprint
 import fileparse
 
 def read_portfolio(path):
@@ -54,7 +52,7 @@ def print_report(path_portfolio, path_prices):
     print(f'    Total gain: {cur_value-purchase_price:>10.2f}')
 
 if __name__ == "__main__":
-    _, *rest = sys.argv
-    path_portfolio = rest[0] if len(rest)>0 else 'Data/portfolio.csv'
-    path_prices = rest[1] if len(rest)>1 else 'Data/prices.csv'
-    print_report(path_portfolio, path_prices)
+    import sys
+    if len(sys.argv) != 3:
+        raise SystemExit(f'Usage: {sys.argv[0]} portfile pricefile')
+    print_report(sys.argv[1], sys.argv[2])
