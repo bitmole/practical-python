@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # pcost.py
 #
 # Exercise 1.27
@@ -10,12 +12,12 @@ def portfolio_cost(path):
     portfolio = report.read_portfolio(path)
     return sum(s['shares'] * s['price'] for s in portfolio)
 
-def main(path):
-    total = portfolio_cost(path)
-    return f'Total cost {total:0.2f}'
+def main(argv):
+    if len(argv) != 2:
+        raise SystemExit(f'Usage: {argv[0]} portfile')
+    total = portfolio_cost(argv[1])
+    print(f'Total cost ${total}')
 
 if __name__ == "__main__":
-    _, *rest = sys.argv
-    path = rest[0] if rest else 'Data/portfolio.csv'
-    print(main(path))
-
+    import sys
+    main(sys.argv)

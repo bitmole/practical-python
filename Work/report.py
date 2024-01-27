@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # report.py
 #
 # Exercise 2.4
@@ -51,8 +52,11 @@ def print_report(path_portfolio, path_prices):
     print(f' Current value: {cur_value:>10.2f}')
     print(f'    Total gain: {cur_value-purchase_price:>10.2f}')
 
+def main(argv):
+    if len(argv) != 3:
+        raise SystemExit(f'Usage: {argv[0]} portfile pricefile')
+    print_report(argv[1], argv[2])
+
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) != 3:
-        raise SystemExit(f'Usage: {sys.argv[0]} portfile pricefile')
-    print_report(sys.argv[1], sys.argv[2])
+    main(sys.argv)
