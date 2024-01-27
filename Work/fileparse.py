@@ -3,17 +3,17 @@
 # Exercise 3.3
 import csv
 
-def parse_csv(filename, 
+def parse_csv(data, 
               select=None, 
               types=None, 
               has_headers=True, 
               delimiter=',', 
               silence_errors=False):
-    """Parse a CSV file into a list of records
+    """Parse a CSV stream into a list of records
        structured as dicts.
 
-    :filename:      path to file
-    :select:        columns
+    :data:          file-like object
+    :select:        selected columns
     :types:         conversion functions
     :has_headers
     :delimiter
@@ -38,28 +38,24 @@ def parse_csv(filename,
                     print(f"Row {i}: Couldn't convert", row)
                     print(f"Row {i}: Reason", e)
 
-    records = []
-    with open(filename, 'rt') as f:
-        rows = csv.reader(f, delimiter=delimiter)
-        if has_headers:
-            headers = next(rows)
+    rows = csv.reader(data, delimiter=delimiter)
+    if has_headers:
+        headers = next(rows)
 
-        rows = (r for r in rows if r) # generate only non-empty rows
+    rows = (r for r in rows if r) # generate only non-empty rows
 
-        # filter columns
-        if select:
-            indices = [headers.index(c) for c in select]
-            headers = select
-            rows = ([row[i] for i in indices] for row in rows)
+    # filter columns
+    if select:
+        indices = [headers.index(c) for c in select]
+        headers = select
+        rows = ([row[i] for i in indices] for row in rows)
 
-        # convert to types
-        if types:
-            rows = convert(rows)
+    # convert to types
+    if types:
+        rows = convert(rows)
 
-        # package to records
-        if has_headers:
-            records = [dict(zip(headers, row)) for row in rows] 
-        else:
-            records = [tuple(r) for r in rows]
-
-    return records
+    # package to records
+    if has_headers:
+        return [dict(zip(headers, row)) for row in rows] 
+    else:
+        return [tuple(r) for r in rows]

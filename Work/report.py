@@ -10,13 +10,16 @@ def read_portfolio(path):
     """
     Parses data file into stock portfolio
     """
-    return fileparse.parse_csv(path, types=[str, int, float])
+    with open(path, 'rt') as file:
+        portfolio = fileparse.parse_csv(file, types=[str, int, float])
+    return portfolio
 
 def read_prices(path):
     """
     Parses price data file into stock price dictionary
     """
-    prices = fileparse.parse_csv(path, types=[str, float], has_headers=False)
+    with open(path, 'rt') as file:
+        prices = fileparse.parse_csv(file, types=[str, float], has_headers=False)
     return {n:p for n, p in prices}
 
 def make_report(portfolio, prices):
