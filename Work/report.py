@@ -5,6 +5,7 @@
 
 import csv
 import fileparse
+from stock import Stock
 
 def read_portfolio(path):
     """
@@ -12,7 +13,7 @@ def read_portfolio(path):
     """
     with open(path, 'rt') as file:
         portfolio = fileparse.parse_csv(file, types=[str, int, float])
-    return portfolio
+    return [Stock(d['name'], d['shares'], d['price']) for d in portfolio]
 
 def read_prices(path):
     """
@@ -23,21 +24,15 @@ def read_prices(path):
     return {n:p for n, p in prices}
 
 def make_report(portfolio, prices):
-    rows = []
-    for s in portfolio:
-        name = s['name']
-        nshares = s['shares']
-        cur_price = prices[s['name']]
-        change = cur_price - s['price']
-        rows.append((name, nshares, cur_price, change))
-    return rows
+    return [(s.name, s.shares, prices[s.name], prices[s.name] - s.price) 
+            for s in portfolio]
 
 def print_report(path_portfolio, path_prices):
     # collect report data
     portfolio = read_portfolio(path_portfolio)
     prices = read_prices(path_prices)
-    purchase_price = sum(s['shares']*s['price'] for s in portfolio)
-    cur_value = sum(s['shares']*prices[s['name']] for s in portfolio)
+    purchase_price = sum(s.cost() for s in portfolio)
+    cur_value = sum(s.shares * prices[s.name] for s in portfolio)
 
     # print headers
     headers = ('Name', 'Shares', 'Price', 'Change')
