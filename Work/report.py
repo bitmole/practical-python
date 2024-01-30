@@ -5,6 +5,7 @@
 
 import csv
 import fileparse
+import tableformat
 from stock import Stock
 
 def read_portfolio(path):
@@ -27,33 +28,25 @@ def make_report(portfolio, prices):
     return [(s.name, s.shares, prices[s.name], prices[s.name] - s.price) 
             for s in portfolio]
 
-def print_report(path_portfolio, path_prices):
+def print_report(report, formatter):
+    formatter.headings(['Name', 'Shares', 'Price', 'Change'])
+    for name, shares, price, change in report:
+        formatter.row((name, str(shares), f'{price:0.2f}', f'{change:0.2f}'))
+
+def portfolio_report(path_portfolio, path_prices):
     # collect report data
     portfolio = read_portfolio(path_portfolio)
     prices = read_prices(path_prices)
-    purchase_price = sum(s.cost() for s in portfolio)
-    cur_value = sum(s.shares * prices[s.name] for s in portfolio)
+    report = make_report(portfolio, prices)
 
-    # print headers
-    headers = ('Name', 'Shares', 'Price', 'Change')
-    print('%10s '*len(headers) % headers)
-    print(len(headers) * ((10*'-') + ' '))
-
-    # print rows
-    for s, n, p, d in make_report(portfolio, prices):
-        p = f'${p:0.2f}' # pre-format price
-        print(f'{s:>10s} {n:>10d} {p:>10s} {d:>10.2f}')
-
-    # print summary
-    print('='*43)
-    print(f'Purchase price: {purchase_price:>10.2f}')
-    print(f' Current value: {cur_value:>10.2f}')
-    print(f'    Total gain: {cur_value-purchase_price:>10.2f}')
+    # print it!
+    formatter = tableformat.TextTableFormatter()
+    print_report(report, formatter)
 
 def main(argv):
     if len(argv) != 3:
         raise SystemExit(f'Usage: {argv[0]} portfile pricefile')
-    print_report(argv[1], argv[2])
+    portfolio_report(argv[1], argv[2])
 
 if __name__ == "__main__":
     import sys
