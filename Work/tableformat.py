@@ -9,6 +9,12 @@ def create_formatter(fmt):
         return HTMLTableFormatter()
     else:
         raise RuntimeError(f'Unknown format {fmt}')
+
+def print_table(portfolio, columns, formatter):
+    formatter.headings(columns)
+    for s in portfolio:
+        data = [str(getattr(s, a)) for a in columns]
+        formatter.row(data)
     
 class TableFormatter:
     """
