@@ -1,5 +1,15 @@
 # tableformat.py
 
+def create_formatter(fmt):
+    if fmt=='txt':
+        return TextTableFormatter()
+    elif fmt=='csv':
+        return CSVTableFormatter()
+    elif fmt=='html':
+        return HTMLTableFormatter()
+    else:
+        raise RuntimeError(f'Unknown format {fmt}')
+    
 class TableFormatter:
     """
     Formatter ABC

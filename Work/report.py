@@ -31,22 +31,25 @@ def make_report(portfolio, prices):
 def print_report(report, formatter):
     formatter.headings(['Name', 'Shares', 'Price', 'Change'])
     for name, shares, price, change in report:
-        formatter.row((name, str(shares), f'{price:0.2f}', f'{change:0.2f}'))
+        formatter.row((name, str(shares), f'${price:0.2f}', f'{change:0.2f}'))
 
-def portfolio_report(path_portfolio, path_prices):
+def portfolio_report(path_portfolio, path_prices, fmt='txt'):
     # collect report data
     portfolio = read_portfolio(path_portfolio)
     prices = read_prices(path_prices)
     report = make_report(portfolio, prices)
 
     # print it!
-    formatter = tableformat.HTMLTableFormatter()
+    formatter = tableformat.create_formatter(fmt)
     print_report(report, formatter)
 
 def main(argv):
-    if len(argv) != 3:
-        raise SystemExit(f'Usage: {argv[0]} portfile pricefile')
-    portfolio_report(argv[1], argv[2])
+    if len(argv) < 3:
+        raise SystemExit(f'Usage: {argv[0]} portfile pricefile [format(txt|csv|html)]')
+    elif len(argv) == 3:
+        portfolio_report(argv[1], argv[2])
+    else: # optional format arg?
+        portfolio_report(argv[1], argv[2], fmt=argv[3])
 
 if __name__ == "__main__":
     import sys
