@@ -27,3 +27,24 @@ class TextTableFormatter(TableFormatter):
         for d in data:
             print(f'{d:>10s}', end=' ')
         print()
+
+class CSVTableFormatter(TableFormatter):
+    def headings(self, headers):
+        print(','.join(headers))
+
+    def row(self, data):
+        print(','.join(data))
+
+class HTMLTableFormatter(TableFormatter):
+    def headings(self, headers):
+        print('<tr>', end='')
+        for h in headers:
+            print(f'<th>{h}</th>', end='')
+        print('</tr>')
+
+    def row(self, data):
+        print('<tr>', end='')
+        for d in data:
+            print(f'<td>{d}</td>', end='')
+        print('</tr>')
+

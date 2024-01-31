@@ -40,7 +40,7 @@ def portfolio_report(path_portfolio, path_prices):
     report = make_report(portfolio, prices)
 
     # print it!
-    formatter = tableformat.TextTableFormatter()
+    formatter = tableformat.HTMLTableFormatter()
     print_report(report, formatter)
 
 def main(argv):
