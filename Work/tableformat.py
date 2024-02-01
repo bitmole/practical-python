@@ -1,14 +1,16 @@
 # tableformat.py
 
 def create_formatter(fmt):
-    if fmt=='txt':
-        return TextTableFormatter()
-    elif fmt=='csv':
-        return CSVTableFormatter()
-    elif fmt=='html':
-        return HTMLTableFormatter()
-    else:
-        raise RuntimeError(f'Unknown format {fmt}')
+    formatters = {
+            'txt': TextTableFormatter,
+            'csv': CSVTableFormatter,
+            'html': HTMLTableFormatter,
+            }
+
+    if fmt not in formatters.keys():
+        raise FormatError(f'Unknown table format {fmt}')
+
+    return formatters[fmt]()
 
 def print_table(portfolio, columns, formatter):
     formatter.headings(columns)
@@ -64,3 +66,5 @@ class HTMLTableFormatter(TableFormatter):
             print(f'<td>{d}</td>', end='')
         print('</tr>')
 
+class FormatError(Exception):
+    pass

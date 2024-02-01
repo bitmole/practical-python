@@ -12,6 +12,7 @@ class Stock(object):
     def __unicode__(self):
         pass
 
+    @property
     def cost(self):
         return self.shares * self.price
 
