@@ -9,10 +9,10 @@ class Stock(object):
         return f"Stock('{self.name}', {self.shares}, {self.price})"
     
     def __str__(self):
-        pass
+        return repr(self)
     
     def __unicode__(self):
-        pass
+        return str(self)
 
     @property
     def cost(self):
