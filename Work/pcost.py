@@ -10,7 +10,7 @@ import report
 
 def portfolio_cost(path):
     portfolio = report.read_portfolio(path)
-    return sum(s.cost for s in portfolio)
+    return portfolio.total_cost
 
 def main(argv):
     if len(argv) != 2:

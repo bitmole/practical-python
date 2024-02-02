@@ -7,14 +7,16 @@ import csv
 import fileparse
 import tableformat
 from stock import Stock
+from portfolio import Portfolio
 
 def read_portfolio(path):
     """
     Parses data file into stock portfolio
     """
     with open(path, 'rt') as file:
-        portfolio = fileparse.parse_csv(file, types=[str, int, float])
-    return [Stock(d['name'], d['shares'], d['price']) for d in portfolio]
+        dicts = fileparse.parse_csv(file, types=[str, int, float])
+    portfolio = [Stock(d['name'], d['shares'], d['price']) for d in dicts]
+    return Portfolio(portfolio)
 
 def read_prices(path):
     """
