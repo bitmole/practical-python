@@ -13,14 +13,23 @@ def follow(logfile):
                 continue
             yield line
 
-def ticker(portfile, tickerfile):
-    import report
-    portfolio = report.read_portfolio(portfile)
-    for line in follow(tickerfile):
+def filematch(lines, substr):
+    for line in lines:
+        if substr in line:
+            yield line
+
+def convert(lines):
+    for line in lines:
         fields = line.split(',')
         name = fields[0].strip('"')
         price = float(fields[1])
         change = float(fields[4])
+        yield (name, price, change)
+
+def ticker(portfile, tickerfile):
+    import report
+    portfolio = report.read_portfolio(portfile)
+    for name, price, change in convert(follow(tickerfile)):
         if name in portfolio:
             print(f'{name:>10s} {price:>10.2f} {change:>10.2f}')
 
