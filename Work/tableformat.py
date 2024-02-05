@@ -17,6 +17,9 @@ def print_table(portfolio, columns, formatter):
     for s in portfolio:
         data = [str(getattr(s, a)) for a in columns]
         formatter.row(data)
+
+def stringify(row):
+    return (str(val) for val in row)
     
 class TableFormatter:
     """
@@ -42,7 +45,7 @@ class TextTableFormatter(TableFormatter):
         print(('-'*10 + ' ')*len(headers))
 
     def row(self, data):
-        for d in data:
+        for d in stringify(data):
             print(f'{d:>10s}', end=' ')
         print()
 
@@ -51,7 +54,7 @@ class CSVTableFormatter(TableFormatter):
         print(','.join(headers))
 
     def row(self, data):
-        print(','.join(data))
+        print(','.join(stringify(data)))
 
 class HTMLTableFormatter(TableFormatter):
     def headings(self, headers):
@@ -62,7 +65,7 @@ class HTMLTableFormatter(TableFormatter):
 
     def row(self, data):
         print('<tr>', end='')
-        for d in data:
+        for d in stringify(data):
             print(f'<td>{d}</td>', end='')
         print('</tr>')
 

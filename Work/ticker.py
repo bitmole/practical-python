@@ -24,7 +24,7 @@ def ticker(portfile, logfile, fmt='txt'):
     formatter = tableformat.create_formatter(fmt)
     formatter.headings(['Name', 'Price', 'Change'])
     for r in rows:
-        formatter.row((r['name'], str(r['price']), str(r['change'])))
+        formatter.row((r['name'], f"${r['price']}", r['change']))
 
 
 def main(args):
