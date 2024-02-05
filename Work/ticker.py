@@ -3,35 +3,30 @@
 from follow import follow
 import csv
 
-def filter_symbols(rows, portfolio):
-    for r in rows:
-        if r['name'] in portfolio:
-            yield r
-
 def convert_types(rows, types):
     for r in rows:
         yield [func(val) for func, val in zip(types, r)]
-
-def make_dicts(rows, headers):
-    for r in rows:
-        yield dict(zip(headers, r))
 
 def select_columns(rows, indices):
     for r in rows:
         yield [r[i] for i in indices]
 
-def parse_stock_data(lines):
-    rows = csv.reader(lines)
-    rows = select_columns(rows, [0, 1, 4])
-    rows = convert_types(rows, [str, float, float])
-    rows = make_dicts(rows, ['name', 'price', 'change'])
+def stock_pipeline(stream, portfolio):
+    rows = csv.reader(stream)
+    # select columns
+    rows = ([r[i] for i in [0, 1, 4]] for r in rows)
+    # convert types
+    rows = ([func(val) for func, val in zip((str,float,float), r)] for r in rows)
+    # transform to dicts
+    rows = (dict(zip(('name', 'price', 'change'), r)) for r in rows)
+    # filter portfolio stocks
+    rows = (r for r in rows if r['name'] in portfolio)
     return rows
 
 def ticker(portfile, logfile, fmt='txt'):
     import report, tableformat
-    portfolio = report.read_portfolio(portfile)
-    rows = parse_stock_data(follow(logfile))
-    rows = filter_symbols(rows, portfolio)
+
+    rows = stock_pipeline(follow(logfile), report.read_portfolio(portfile))
 
     # print it!
     formatter = tableformat.create_formatter(fmt)
