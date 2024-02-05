@@ -3,14 +3,6 @@
 from follow import follow
 import csv
 
-def convert_types(rows, types):
-    for r in rows:
-        yield [func(val) for func, val in zip(types, r)]
-
-def select_columns(rows, indices):
-    for r in rows:
-        yield [r[i] for i in indices]
-
 def stock_pipeline(stream, portfolio):
     rows = csv.reader(stream)
     # select columns
