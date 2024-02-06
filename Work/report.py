@@ -9,13 +9,16 @@ import tableformat
 from stock import Stock
 from portfolio import Portfolio
 
-def read_portfolio(path):
+def read_portfolio(path, **opts):
     """
-    Parses data file into stock portfolio
+    Read a stock portfolio file into a list of dictionaries with keys
+    name, shares, and price.
     """
     with open(path, 'rt') as file:
-        dicts = fileparse.parse_csv(file, types=[str, int, float])
-    portfolio = [Stock(d['name'], d['shares'], d['price']) for d in dicts]
+        dicts = fileparse.parse_csv(file, 
+                                    types=[str, int, float],
+                                    **opts)
+    portfolio = [Stock(**d) for d in dicts]
     return Portfolio(portfolio)
 
 def read_prices(path):
@@ -33,7 +36,7 @@ def make_report(portfolio, prices):
 def print_report(report, formatter):
     formatter.headings(['Name', 'Shares', 'Price', 'Change'])
     for name, shares, price, change in report:
-        formatter.row((name, str(shares), f'${price:0.2f}', f'{change:0.2f}'))
+        formatter.row((name, shares, f'${price:0.2f}', f'{change:0.2f}'))
 
 def portfolio_report(path_portfolio, path_prices, fmt='txt'):
     # collect report data
