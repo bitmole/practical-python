@@ -15,11 +15,8 @@ def read_portfolio(path, **opts):
     name, shares, and price.
     """
     with open(path, 'rt') as file:
-        dicts = fileparse.parse_csv(file, 
-                                    types=[str, int, float],
-                                    **opts)
-    portfolio = [Stock(**d) for d in dicts]
-    return Portfolio(portfolio)
+        portfolio = Portfolio.from_csv(file)
+    return portfolio
 
 def read_prices(path):
     """
