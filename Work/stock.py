@@ -29,3 +29,4 @@ class Stock(object):
     def sell(self, n):
         assert n <= self.shares
         self.shares -= n
+        return self
