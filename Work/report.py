@@ -8,6 +8,12 @@ import fileparse
 import tableformat
 from stock import Stock
 from portfolio import Portfolio
+import logging
+logging.basicConfig(
+        # filename = 'app.log',
+        # filemode = 'w',
+        level = logging.WARNING,
+        )
 
 def read_portfolio(path, **opts):
     """

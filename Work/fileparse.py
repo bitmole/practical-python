@@ -2,6 +2,8 @@
 #
 # Exercise 3.3
 import csv
+import logging
+log = logging.getLogger(__name__)
 
 def parse_csv(data, 
               select=None, 
@@ -30,13 +32,13 @@ def parse_csv(data,
     # type conversion helper
     def convert(rows):
         assert types
-        for i, row in enumerate(rows):
+        for i, row in enumerate(rows, 1):
             try:
                 yield [t(val) for t, val in zip(types, row)] 
             except ValueError as e:
                 if not silence_errors:
-                    print(f"Row {i}: Couldn't convert", row)
-                    print(f"Row {i}: Reason", e)
+                    log.warning("Row %d: Couldn't convert %s", i, row)
+                    log.debug("Row %d: Reason %s", i, e)
 
     rows = csv.reader(data, delimiter=delimiter)
     if has_headers:
