@@ -1,6 +1,6 @@
 # ticker.py
 
-from follow import follow
+from .follow import follow
 import csv
 
 def stock_pipeline(stream, portfolio):

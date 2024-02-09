@@ -4,10 +4,10 @@
 # Exercise 2.4
 
 import csv
-import fileparse
-import tableformat
-from stock import Stock
-from portfolio import Portfolio
+from . import fileparse
+from . import tableformat
+from .stock import Stock
+from .portfolio import Portfolio
 import logging
 logging.basicConfig(
         # filename = 'app.log',

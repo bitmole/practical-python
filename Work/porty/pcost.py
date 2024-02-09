@@ -6,7 +6,7 @@
 
 import csv
 import sys
-import report
+from . import report
 
 def portfolio_cost(path):
     portfolio = report.read_portfolio(path)
